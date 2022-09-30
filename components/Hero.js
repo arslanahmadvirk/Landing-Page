@@ -39,22 +39,32 @@ export default function Hero() {
           </div>
         </div>
         {/* COMPANIES */}
-        <div class="w-11/12 py-16 mx-auto rounded-2xl border border-gray-100">
-          <div class="flex flex-wrap -m-4 text-center">
-            <div class="p-4 w-1/5">
-              <img src="/company_1.png" alt="company" className="mx-auto" />
-            </div>
-            <div class="p-4 w-1/5">
-              <img src="/company_2.png" alt="company" className="mx-auto" />
-            </div>
-            <div class="p-4 w-1/5">
-              <img src="/company_3.png" alt="company" className="mx-auto" />
-            </div>
-            <div class="p-4 w-1/5">
-              <img src="/company_4.png" alt="company" className="mx-auto" />
-            </div>
-            <div class="p-4 w-1/5">
-              <img src="/company_5.png" alt="company" className="mx-auto" />
+
+        <div className="w-11/12 mx-auto">
+          <button
+            type="button"
+            className="text-white bg-dark-blue font-medium ml-10 rounded-xl text-sm px-12 py-3 text-center rotate-button"
+            disabled
+          >
+            In us at
+          </button>
+          <div class=" py-16 mx-auto rounded-2xl border border-gray-100">
+            <div class="flex flex-wrap -m-4 text-center">
+              <div class="p-4 w-1/5">
+                <img src="/company_1.png" alt="company" className="mx-auto" />
+              </div>
+              <div class="p-4 w-1/5">
+                <img src="/company_2.png" alt="company" className="mx-auto" />
+              </div>
+              <div class="p-4 w-1/5">
+                <img src="/company_3.png" alt="company" className="mx-auto" />
+              </div>
+              <div class="p-4 w-1/5">
+                <img src="/company_4.png" alt="company" className="mx-auto" />
+              </div>
+              <div class="p-4 w-1/5">
+                <img src="/company_5.png" alt="company" className="mx-auto" />
+              </div>
             </div>
           </div>
         </div>

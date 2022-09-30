@@ -35,4 +35,6 @@ a {
   background-size: contain;
 }
 
-
+.rotate-button{
+  rotate: -18deg;
+}
