@@ -1,8 +1,7 @@
 import Head from "next/head";
 import Image from "next/image";
-import GlobalNetwork from "../components/GlobalNetwork";
+import Features from "../components/Features";
 import Hero from "../components/Hero";
-import Statistics from "../components/Statistics";
 import styles from "../styles/Home.module.css";
 
 export default function Home() {
@@ -16,8 +15,7 @@ export default function Home() {
 
       <main className="bg-white mx-auto">
         <Hero />
-        <GlobalNetwork />
-        <Statistics />
+        <Features />
       </main>
     </div>
   );
