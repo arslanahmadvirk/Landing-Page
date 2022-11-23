@@ -59,14 +59,16 @@ const Navbar = () => {
                   </a>
                 </li>
               </Link>
-              <li>
-                <a
-                  href="#"
-                  className="block py-2 pl-3 pr-4 rounded hover:bg-green-500 text-lg md:hover:bg-transparent md:border-0 md:hover:text-green-500 md:p-0 text-white md:dark:hover:bg-transparent"
-                >
-                  Password Tool
-                </a>
-              </li>
+              <Link href="/passwordTool" passHref>
+                <li>
+                  <a
+                    href="#"
+                    className="block py-2 pl-3 pr-4 rounded hover:bg-green-500 text-lg md:hover:bg-transparent md:border-0 md:hover:text-green-500 md:p-0 text-white md:dark:hover:bg-transparent"
+                  >
+                    Password Tool
+                  </a>
+                </li>
+              </Link>
               <li>
                 <a
                   href="#"
@@ -85,14 +87,16 @@ const Navbar = () => {
                   </a>
                 </li>
               </Link>
-              <li>
-                <a
-                  href="#"
-                  className="block py-2 pl-3 pr-4 rounded bg-green-500 text-lg md:hover:bg-transparent md:border-0 md:hover:text-white md:p-0 md:text-green-500 md:bg-transparent text-white-500 md:dark:hover:bg-transparent font-bold"
-                >
-                  Login
-                </a>
-              </li>
+              <Link href="/login" passHref>
+                <li>
+                  <a
+                    href="#"
+                    className="block py-2 pl-3 pr-4 rounded bg-green-500 text-lg md:hover:bg-transparent md:border-0 md:hover:text-white md:p-0 md:text-green-500 md:bg-transparent text-white-500 md:dark:hover:bg-transparent font-bold"
+                  >
+                    Login
+                  </a>
+                </li>
+              </Link>
             </ul>
           </div>
         </div>
