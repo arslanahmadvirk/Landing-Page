@@ -12,7 +12,7 @@ export default function Hero() {
           capital can unlock long-term value and drive economic growth.
         </p>
         <div className="flex flex-col mb-8 lg:mb-5 space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
-          <Link href="/learn" passHref>
+          <Link href="/quiz" passHref>
             <a
               href="#"
               className="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-gray-900 focus:ring-4 hover:bg-gray-700 "

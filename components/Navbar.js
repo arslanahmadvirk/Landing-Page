@@ -1,20 +1,43 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import Router, { useRouter } from "next/router";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../redux/authSlice";
 const Navbar = () => {
+  const dispatch = useDispatch();
+  const [isLoggedin, setisLoggedin] = useState(false);
+  const auth = useSelector((state) => state.auth.isLoggedin);
+  const router = useRouter();
+  useEffect(() => {
+    setisLoggedin(auth);
+    setisLoggedin(localStorage.getItem("isLoggedin"));
+  }, [auth]);
+
+  const handleLogOut = (e) => {
+    e.preventDefault();
+    dispatch(logout());
+    setisLoggedin(false);
+    localStorage.removeItem("isLoggedin");
+    router.push("/login");
+  };
+
   return (
     <div>
       <nav className="bg-gray-900 px-2 sm:px-4 py-2.5 fixed w-full z-20 top-0 left-0 dark:border-gray-600">
         <div className="container flex flex-wrap items-center justify-between mx-auto">
-          <a href="https://flowbite.com/" className="flex items-center">
-            <img
-              src="https://flowbite.com/docs/images/logo.svg"
-              className="h-6 mr-3 sm:h-9"
-              alt="Flowbite Logo"
-            />
-            <span className="self-center text-xl font-semibold whitespace-nowrap text-white">
-              QuizApp
-            </span>
-          </a>
+          <Link href="/" passHref>
+            <a href="#" className="flex items-center">
+              <img
+                src="https://flowbite.com/docs/images/logo.svg"
+                className="h-6 mr-3 sm:h-9"
+                alt="Flowbite Logo"
+              />
+              <span className="self-center text-xl font-semibold whitespace-nowrap text-white">
+                QuizApp
+              </span>
+            </a>
+          </Link>
           <button
             data-collapse-toggle="navbar-default"
             type="button"
@@ -69,14 +92,16 @@ const Navbar = () => {
                   </a>
                 </li>
               </Link>
-              <li>
-                <a
-                  href="#"
-                  className="block py-2 pl-3 pr-4 rounded hover:bg-green-500 text-lg md:hover:bg-transparent md:border-0 md:hover:text-green-500 md:p-0 text-white md:dark:hover:bg-transparent"
-                >
-                  Take Quiz
-                </a>
-              </li>
+              <Link href="/quiz" passHref>
+                <li>
+                  <a
+                    href="#"
+                    className="block py-2 pl-3 pr-4 rounded hover:bg-green-500 text-lg md:hover:bg-transparent md:border-0 md:hover:text-green-500 md:p-0 text-white md:dark:hover:bg-transparent"
+                  >
+                    Take Quiz
+                  </a>
+                </li>
+              </Link>
               <Link href="/email" passHref>
                 <li>
                   <a
@@ -87,16 +112,40 @@ const Navbar = () => {
                   </a>
                 </li>
               </Link>
-              <Link href="/login" passHref>
-                <li>
-                  <a
-                    href="#"
-                    className="block py-2 pl-3 pr-4 rounded bg-green-500 text-lg md:hover:bg-transparent md:border-0 md:hover:text-white md:p-0 md:text-green-500 md:bg-transparent text-white-500 md:dark:hover:bg-transparent font-bold"
-                  >
-                    Login
-                  </a>
-                </li>
-              </Link>
+              {isLoggedin ? (
+                <>
+                  <Link href="/dashboard">
+                    <li>
+                      <a
+                        href="#"
+                        className="block py-2 pl-3 pr-4 rounded bg-green-500 text-lg md:hover:bg-transparent md:border-0 md:hover:text-white md:p-0 md:text-green-500 md:bg-transparent text-white-500 md:dark:hover:bg-transparent font-bold"
+                      >
+                        Dashboard
+                      </a>
+                    </li>
+                  </Link>
+                  <li>
+                    <a
+                      href="#"
+                      className="block py-2 pl-3 pr-4 rounded bg-green-500 text-lg md:hover:bg-transparent md:border-0 md:hover:text-white md:p-0 md:text-green-500 md:bg-transparent text-white-500 md:dark:hover:bg-transparent font-bold"
+                      onClick={(e) => handleLogOut(e)}
+                    >
+                      LogOut
+                    </a>
+                  </li>
+                </>
+              ) : (
+                <Link href="/login" passHref>
+                  <li>
+                    <a
+                      href="#"
+                      className="block py-2 pl-3 pr-4 rounded bg-green-500 text-lg md:hover:bg-transparent md:border-0 md:hover:text-white md:p-0 md:text-green-500 md:bg-transparent text-white-500 md:dark:hover:bg-transparent font-bold"
+                    >
+                      Login
+                    </a>
+                  </li>
+                </Link>
+              )}
             </ul>
           </div>
         </div>

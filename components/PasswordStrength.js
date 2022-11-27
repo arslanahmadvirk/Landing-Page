@@ -1,7 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 import react, { useState } from "react";
-import Sidebar from "../components/Sidebar";
-import EmailsList from "../components/emailsList";
 import PasswordStrengthMeter from "./PasswordStrengthMeter";
 
 export default function PasswordStrength() {

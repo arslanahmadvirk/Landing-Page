@@ -29,11 +29,12 @@ export default function Learn() {
           </div>
           <div className="flex flex-wrap -m-4">
             <div className="xl:w-1/4 md:w-1/2 p-4">
-              <div className="bg-gray-100 p-6 rounded-lg">
+              <div className="bg-gray-100 p-6 rounded-lg ">
                 <iframe
                   width="420"
                   height="240"
                   src="https://www.youtube.com/embed/qbXbZ9IVfcQ"
+                  className="w-[260px] md:w-full mx-auto"
                 ></iframe>
 
                 <h3 className="tracking-widest text-green-500 text-xs font-medium title-font mt-3">
@@ -54,6 +55,7 @@ export default function Learn() {
                   width="420"
                   height="240"
                   src="https://www.youtube.com/embed/bQDHc9GFILE"
+                  className="w-[260px] md:w-full mx-auto"
                 ></iframe>
                 <h3 className="tracking-widest text-green-500 text-xs font-medium title-font mt-3">
                   SUBTITLE
@@ -73,6 +75,7 @@ export default function Learn() {
                   width="420"
                   height="240"
                   src="https://www.youtube.com/embed/gr8Jcdc_SW0"
+                  className="w-[260px] md:w-full mx-auto"
                 ></iframe>
                 <h3 className="tracking-widest text-green-500 text-xs font-medium title-font mt-3">
                   SUBTITLE
@@ -92,6 +95,7 @@ export default function Learn() {
                   width="420"
                   height="240"
                   src="https://www.youtube.com/embed/gr8Jcdc_SW0"
+                  className="w-[260px] md:w-full mx-auto"
                 ></iframe>
                 <h3 className="tracking-widest text-green-500 text-xs font-medium title-font mt-3">
                   SUBTITLE
