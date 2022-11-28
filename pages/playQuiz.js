@@ -144,7 +144,7 @@ export default function Home() {
               </Link>
             </div>
           </div>
-        ) : questions.length > 1 ? (
+        ) : questions.length > 0 ? (
           <>
             <div className="flex flex-col items-start w-full">
               <h4 className="mt-10 text-md text-black">
