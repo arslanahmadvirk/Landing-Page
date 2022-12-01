@@ -2,6 +2,7 @@
 import react from "react";
 import Sidebar from "../components/Sidebar";
 import EmailsList from "../components/emailsList";
+import EmailView from "../components/emailView";
 export default function Email() {
   return (
     <section className="bg-white mt-12">
@@ -15,7 +16,7 @@ export default function Email() {
         </p>
         <div className="flex gap-2 justify-center ">
           <Sidebar />
-          <EmailsList />
+          <EmailView />
         </div>
       </div>
     </section>

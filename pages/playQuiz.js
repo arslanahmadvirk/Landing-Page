@@ -3,12 +3,14 @@ import Link from "next/link";
 // import questions from "../questions.json";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import { toast } from "react-toastify";
 import { STRAPI_URL } from "../utils/strapi_url";
 
 export default function Home() {
   const [questions, setQuestions] = useState([]);
   const [handelText, setHandelText] = useState("");
+  const [handelEmail, setHandelEmail] = useState("");
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [score, setScore] = useState(0);
@@ -34,8 +36,8 @@ export default function Home() {
   });
 
   const savePoints = () => {
-    if (!handelText) {
-      toast.error("Please enter your name!!!", {
+    if (!handelText || !handelEmail) {
+      toast.error("Please enter your details!!!", {
         position: toast.POSITION.TOP_CENTER,
       });
     } else {
@@ -43,6 +45,7 @@ export default function Home() {
         .post(STRAPI_URL + `/api/leader-boards`, {
           data: {
             user_name: handelText,
+            user_email: handelEmail,
             points: score,
           },
         })
@@ -118,6 +121,21 @@ export default function Home() {
                   placeholder="Your name"
                   onChange={(e) => setHandelText(e.target.value)}
                 />
+                <label
+                  for="email"
+                  className="block mb-2 text-sm font-medium text-gray-900"
+                >
+                  Enter Your Email to Save Results
+                </label>
+                <input
+                  type="text"
+                  name="text"
+                  id="text"
+                  value={handelEmail}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                  placeholder="Your email"
+                  onChange={(e) => setHandelEmail(e.target.value)}
+                />
               </div>
               <div
                 className="text-white bg-green-500 border-0 py-2 px-6 focus:outline-none hover:bg-green-600 rounded text-lg text-center justify-center cursor-pointer flex mt-2 mx-auto"
@@ -147,16 +165,36 @@ export default function Home() {
         ) : questions.length > 1 ? (
           <>
             <div className="flex flex-col items-start w-full">
-              <h4 className="mt-10 text-md text-black">
-                Question {currentQuestion + 1} of {questions.length}
-              </h4>
+              <div className="flex flex-row space-x-20 md:space-x-80">
+                <h4 className="mt-10 text-md text-black">
+                  Question {currentQuestion + 1} of {questions.length}
+                </h4>
+                <div className="text-black mt-8">
+                  <CountdownCircleTimer
+                    isPlaying
+                    size={45}
+                    duration={30}
+                    colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
+                    colorsTime={[7, 5, 2, 0]}
+                    onComplete={() => {
+                      currentQuestion + 1 === questions.length
+                        ? handleSubmitButton()
+                        : handleNext();
+                      return { shouldRepeat: true, delay: 0.5 };
+                    }}
+                  >
+                    {({ remainingTime }) => remainingTime}
+                  </CountdownCircleTimer>
+                </div>
+              </div>
               <div className="mt-4 text-2xl text-black">
                 {questions[currentQuestion].attributes.question}
               </div>
+
               {questions[currentQuestion].attributes.image.data !== null ? (
                 <div>
                   <img
-                    className="lg:h-48 md:h-36 w-full object-cover object-center mt-5"
+                    className="md:h-[250px] md:w-[550px] w-full object-cover object-center mt-5"
                     src={
                       questions[currentQuestion].attributes.image.data
                         .attributes.url
@@ -168,123 +206,121 @@ export default function Home() {
                 <></>
               )}
             </div>
-            <div className="flex flex-col w-full">
-              <div
-                className="flex items-center w-full py-4 pl-5 m-2 ml-0 space-x-2 border-2 cursor-pointer border-white rounded-xl bg-gray-200"
-                onClick={(e) =>
-                  handleAnswerOption(
-                    questions[currentQuestion].attributes.option1
-                  )
-                }
-              >
-                <input
-                  type="radio"
-                  name={questions[currentQuestion].attributes.option1}
-                  value={questions[currentQuestion].attributes.option1}
-                  checked={
-                    questions[currentQuestion].attributes.option1 ===
-                    selectedOptions[currentQuestion]?.answerByUser
-                  }
-                  onChange={(e) =>
+            <div className="flex flex-col md:flex-row w-full mt-5">
+              <div className="w-full">
+                <div
+                  className="flex items-center w-full py-4 pl-5 m-2 ml-0 space-x-2 border-2 cursor-pointer border-white rounded-xl bg-red-600"
+                  onClick={(e) =>
                     handleAnswerOption(
                       questions[currentQuestion].attributes.option1
                     )
                   }
-                  className="w-6 h-6 bg-white"
-                />
-                <p className="ml-6 text-black">
-                  {questions[currentQuestion].attributes.option1}
-                </p>
-              </div>
-              <div
-                className="flex items-center w-full py-4 pl-5 m-2 ml-0 space-x-2 border-2 cursor-pointer border-white rounded-xl bg-gray-200"
-                onClick={(e) =>
-                  handleAnswerOption(
-                    questions[currentQuestion].attributes.option2
-                  )
-                }
-              >
-                <input
-                  type="radio"
-                  name={questions[currentQuestion].attributes.option2}
-                  value={questions[currentQuestion].attributes.option2}
-                  checked={
-                    questions[currentQuestion].attributes.option2 ===
-                    selectedOptions[currentQuestion]?.answerByUser
-                  }
-                  onChange={(e) =>
+                >
+                  <input
+                    type="radio"
+                    name={questions[currentQuestion].attributes.option1}
+                    value={questions[currentQuestion].attributes.option1}
+                    checked={
+                      questions[currentQuestion].attributes.option1 ===
+                      selectedOptions[currentQuestion]?.answerByUser
+                    }
+                    onChange={(e) =>
+                      handleAnswerOption(
+                        questions[currentQuestion].attributes.option1
+                      )
+                    }
+                    className="w-6 h-6 bg-white"
+                  />
+                  <p className="ml-6 text-white">
+                    {questions[currentQuestion].attributes.option1}
+                  </p>
+                </div>
+                <div
+                  className="flex items-center w-full py-4 pl-5 m-2 ml-0 space-x-2 border-2 cursor-pointer border-white rounded-xl bg-blue-600"
+                  onClick={(e) =>
                     handleAnswerOption(
                       questions[currentQuestion].attributes.option2
                     )
                   }
-                  className="w-6 h-6 bg-white"
-                />
-                <p className="ml-6 text-black">
-                  {questions[currentQuestion].attributes.option2}
-                </p>
+                >
+                  <input
+                    type="radio"
+                    name={questions[currentQuestion].attributes.option2}
+                    value={questions[currentQuestion].attributes.option2}
+                    checked={
+                      questions[currentQuestion].attributes.option2 ===
+                      selectedOptions[currentQuestion]?.answerByUser
+                    }
+                    onChange={(e) =>
+                      handleAnswerOption(
+                        questions[currentQuestion].attributes.option2
+                      )
+                    }
+                    className="w-6 h-6 bg-white"
+                  />
+                  <p className="ml-6 text-white">
+                    {questions[currentQuestion].attributes.option2}
+                  </p>
+                </div>
               </div>
-              <div
-                className="flex items-center w-full py-4 pl-5 m-2 ml-0 space-x-2 border-2 cursor-pointer border-white rounded-xl bg-gray-200"
-                onClick={(e) =>
-                  handleAnswerOption(
-                    questions[currentQuestion].attributes.option3
-                  )
-                }
-              >
-                <input
-                  type="radio"
-                  name={questions[currentQuestion].attributes.option3}
-                  value={questions[currentQuestion].attributes.option3}
-                  checked={
-                    questions[currentQuestion].attributes.option3 ===
-                    selectedOptions[currentQuestion]?.answerByUser
-                  }
-                  onChange={(e) =>
+              <div className="w-full">
+                <div
+                  className="flex items-center w-full py-4 pl-5 m-2 ml-0 space-x-2 border-2 cursor-pointer border-white rounded-xl bg-yellow-400"
+                  onClick={(e) =>
                     handleAnswerOption(
                       questions[currentQuestion].attributes.option3
                     )
                   }
-                  className="w-6 h-6 bg-white"
-                />
-                <p className="ml-6 text-black">
-                  {questions[currentQuestion].attributes.option3}
-                </p>
-              </div>
-              <div
-                className="flex items-center w-full py-4 pl-5 m-2 ml-0 space-x-2 border-2 cursor-pointer border-white rounded-xl bg-gray-200"
-                onClick={(e) =>
-                  handleAnswerOption(
-                    questions[currentQuestion].attributes.option4
-                  )
-                }
-              >
-                <input
-                  type="radio"
-                  name={questions[currentQuestion].attributes.option4}
-                  value={questions[currentQuestion].attributes.option4}
-                  checked={
-                    questions[currentQuestion].attributes.option4 ===
-                    selectedOptions[currentQuestion]?.answerByUser
-                  }
-                  onChange={(e) =>
+                >
+                  <input
+                    type="radio"
+                    name={questions[currentQuestion].attributes.option3}
+                    value={questions[currentQuestion].attributes.option3}
+                    checked={
+                      questions[currentQuestion].attributes.option3 ===
+                      selectedOptions[currentQuestion]?.answerByUser
+                    }
+                    onChange={(e) =>
+                      handleAnswerOption(
+                        questions[currentQuestion].attributes.option3
+                      )
+                    }
+                    className="w-6 h-6 bg-white"
+                  />
+                  <p className="ml-6 text-white">
+                    {questions[currentQuestion].attributes.option3}
+                  </p>
+                </div>
+                <div
+                  className="flex items-center w-full py-4 pl-5 m-2 ml-0 space-x-2 border-2 cursor-pointer border-white rounded-xl bg-green-600"
+                  onClick={(e) =>
                     handleAnswerOption(
                       questions[currentQuestion].attributes.option4
                     )
                   }
-                  className="w-6 h-6 bg-white"
-                />
-                <p className="ml-6 text-black">
-                  {questions[currentQuestion].attributes.option4}
-                </p>
+                >
+                  <input
+                    type="radio"
+                    name={questions[currentQuestion].attributes.option4}
+                    value={questions[currentQuestion].attributes.option4}
+                    checked={
+                      questions[currentQuestion].attributes.option4 ===
+                      selectedOptions[currentQuestion]?.answerByUser
+                    }
+                    onChange={(e) =>
+                      handleAnswerOption(
+                        questions[currentQuestion].attributes.option4
+                      )
+                    }
+                    className="w-6 h-6 bg-white"
+                  />
+                  <p className="ml-6 text-white">
+                    {questions[currentQuestion].attributes.option4}
+                  </p>
+                </div>
               </div>
             </div>
-            <div className="flex justify-between w-full mt-4 text-white">
-              <button
-                onClick={handlePrevious}
-                className="w-[49%] py-3 bg-green-500 rounded-lg"
-              >
-                Previous
-              </button>
+            <div className="mt-5">
               <button
                 onClick={
                   currentQuestion + 1 === questions.length
@@ -296,6 +332,14 @@ export default function Home() {
                 {currentQuestion + 1 === questions.length ? "Submit" : "Next"}
               </button>
             </div>
+            {/* <div className="flex justify-between w-full mt-4 text-white">
+              <button
+                onClick={handlePrevious}
+                className="w-[49%] py-3 bg-green-500 rounded-lg"
+              >
+                Previous
+              </button>
+            </div> */}
           </>
         ) : (
           <>

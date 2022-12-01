@@ -3,14 +3,89 @@ import react, { useState } from "react";
 import { useEffect } from "react";
 import Link from "next/link";
 import Sidebar from "../components/Sidebar";
-import EmailsList from "../components/emailsList";
-import { emailData } from "../EmailData/emails";
+import { toast } from "react-toastify";
+import { STRAPI_URL } from "../utils/strapi_url";
+import axios from "axios";
 
 export default function Email() {
-  const [emailData, setemailData] = useState({});
+  const [emails, setEmails] = useState([]);
+  const [handelText, setHandelText] = useState("");
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [score, setScore] = useState(0);
+  const [showScore, setShowScore] = useState(false);
+
+  async function getEmails() {
+    try {
+      const response = await axios.get(STRAPI_URL + "/api/emails");
+      const result = response.data.data;
+      setEmails(result);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
-    setemailData(JSON.parse(localStorage.getItem("emailData")));
-  }, []);
+    if (emails.length == 0) {
+      getEmails();
+    }
+  });
+
+  const savePoints = () => {
+    if (!handelText) {
+      toast.error("Please enter your name!!!", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+    } else {
+      axios
+        .post(STRAPI_URL + `/api/emails`, {
+          data: {
+            user_name: handelText,
+            points: score,
+          },
+        })
+        .then(
+          (response) => {
+            toast.success("Score saved successfully", {
+              position: toast.POSITION.TOP_CENTER,
+            });
+            console.log(response.data);
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+    }
+  };
+
+  const handleAnswerOption = (answer) => {
+    setSelectedOptions([
+      (selectedOptions[currentQuestion] = { answerByUser: answer }),
+    ]);
+    setSelectedOptions([...selectedOptions]);
+    console.log(selectedOptions);
+  };
+
+  const handlePrevious = () => {
+    const prevQues = currentQuestion - 1;
+    prevQues >= 0 && setCurrentQuestion(prevQues);
+  };
+
+  const handleNext = () => {
+    const nextQues = currentQuestion + 1;
+    nextQues < emails.length && setCurrentQuestion(nextQues);
+  };
+
+  const handleSubmitButton = () => {
+    let newScore = 0;
+    for (let i = 0; i < emails.length; i++) {
+      emails[i].attributes.answer === selectedOptions[i]?.answerByUser &&
+        (newScore += 1);
+    }
+    setScore(newScore);
+    setShowScore(true);
+  };
+
   return (
     <section className="bg-white mt-12">
       <div className="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12">
@@ -79,7 +154,7 @@ export default function Email() {
               </div>
               <div className="mt-5">
                 <h1 className="text-gray-900 text-2xl ">
-                  {emailData?.subject}
+                  {emailData?.attributes?.subject}
                 </h1>
               </div>
               <div className="flex mx-3 mt-5 justify-between ">
@@ -93,21 +168,21 @@ export default function Email() {
                   </div>
                   <div className="flex gap-2 ml-5">
                     <h1 className="text-black font-bold">
-                      {emailData?.sender}
+                      {emailData?.attributes?.sender}
                     </h1>
                     <h1 className="text-gray-600 ">
-                      {emailData?.sender_email}
+                      {emailData?.attributes?.sender_email}
                     </h1>
                   </div>
                 </div>
                 <div className="mr-[70px]">
-                  <h1 className="text-black">{emailData?.time}</h1>
+                  <h1 className="text-black">08:20pm</h1>
                 </div>
               </div>
             </div>
             <div>
               <h6 className="text-black text-sm text-justify mx-20">
-                {emailData?.message}
+                {emailData?.attributes?.message}
               </h6>
             </div>
             <div className="mx-20 justify-start flex mt-10 ">
@@ -118,7 +193,7 @@ export default function Email() {
             </div>
             <div className="mx-20 mt-2">
               <img
-                src={emailData?.attachment}
+                src={emailData?.attributes?.attachment}
                 alt="attachment"
                 className="w-[120px] h-[100px]"
               />
@@ -129,6 +204,21 @@ export default function Email() {
               </h1>
               <h1 className="text-black inline-block border border-gray-800 px-6 py-1 rounded-full">
                 Forward
+              </h1>
+            </div>
+
+            <div className="flex justify-start mx-20 mt-10 gap-4 ">
+              <h1 className="text-white bg-green-500 inline-block border cursor-pointer  px-8 py-1 rounded-full">
+                LIGIT
+              </h1>
+              <h1 className="text-white inline-block border cursor-pointer bg-red-500 px-6 py-1 rounded-full">
+                PHISHING
+              </h1>
+              <h1 className="text-white bg-green-500 inline-block border cursor-pointer  px-8 py-1 rounded-full">
+                Back
+              </h1>
+              <h1 className="text-white inline-block border cursor-pointer bg-red-500 px-6 py-1 rounded-full">
+                Next
               </h1>
             </div>
           </section>
