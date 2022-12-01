@@ -162,7 +162,7 @@ export default function Home() {
               </Link>
             </div>
           </div>
-        ) : questions.length > 1 ? (
+        ) : questions.length > 0 ? (
           <>
             <div className="flex flex-col items-start w-full">
               <div className="flex flex-row space-x-20 md:space-x-80">
