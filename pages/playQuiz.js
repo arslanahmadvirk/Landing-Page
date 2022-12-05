@@ -15,6 +15,7 @@ export default function Home() {
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [score, setScore] = useState(0);
   const [showScore, setShowScore] = useState(false);
+  const [isNext, setisNext] = useState(false);
 
   async function getQuestionsData() {
     try {
@@ -79,6 +80,7 @@ export default function Home() {
   const handleNext = () => {
     const nextQues = currentQuestion + 1;
     nextQues < questions.length && setCurrentQuestion(nextQues);
+    setisNext(true);
   };
 
   const handleSubmitButton = () => {

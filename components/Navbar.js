@@ -102,7 +102,7 @@ const Navbar = () => {
                   </a>
                 </li>
               </Link>
-              <Link href="/email" passHref>
+              <Link href="/emailSecurity" passHref>
                 <li>
                   <a
                     href="#"
